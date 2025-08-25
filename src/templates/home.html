@@ -1,0 +1,9 @@
+{% extends './template.html' %}
+
+{% block title %}Home{% endblock %}
+
+
+{% block body %}
+<h1>Bienvenido a la página principal {{current_user.username}}</h1>
+<a class="btn btn-secondary" href="{{ url_for('logout') }}">Cerrar sesión</a>
+{% endblock %}
