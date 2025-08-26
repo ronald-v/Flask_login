@@ -35,7 +35,7 @@ def login():
         if logged_user != None:
             if logged_user.password:
                 login_user(logged_user)
-                
+                print(load_user(logged_user.id))
                 return redirect(url_for('home'))
             else:
                 flash("Usuario o contraseña incorrecta.")
@@ -54,7 +54,7 @@ def logout():
     return redirect(url_for('login'))
     
 @app.route('/home')
-#@login_required
+@login_required
 def home():
     return render_template('home.html')
 

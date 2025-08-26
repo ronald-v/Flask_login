@@ -6,14 +6,18 @@ class ModelUser():
     def login(self, db, user):
         try:
             cursor = db.connection.cursor()
-            sql = """SELECT id, password FROM login 
-                    WHERE status = 1 AND id = '{}'""".format(user.username)
+            sql = """SELECT id, username, password, fullname FROM users 
+                    WHERE username = '{}'""".format(user.username)
             cursor.execute(sql)  #ejecuta la consulta
             row = cursor.fetchone()
-            # cursor.close()
+            cursor.close()
 
             if row != None:
-                user = User(0, row[0], User.check_password(row[1], user.password))
+                print('DB:', row[2])
+                print('Form:', user.password)
+                print('Hash:', User.generate_password(user.password))
+
+                user = User(row[0], row[1], User.check_password(row[2], user.password), row[3])
                 return user
             else:
                 return None
@@ -24,14 +28,13 @@ class ModelUser():
     def get_by_id(self, db, id):
         try:
             cursor = db.connection.cursor()
-            sql = """SELECT id FROM login 
-                    WHERE status = 1 AND id = '{}'""".format(id)
+            sql = "SELECT id, username, fullname FROM users WHERE id = {}".format(id)
             cursor.execute(sql)  #ejecuta la consulta
             row = cursor.fetchone()
-            # cursor.close()
+            cursor.close()
 
             if row != None:
-                return  User(0, row[0], None)
+                return User(row[0], row[1], None, row[2])
             else:
                 return None
         except Exception as ex:
